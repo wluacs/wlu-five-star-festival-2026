@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>W&L Five-Star Festival 2026 — Schedule</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* FSF Brand — deep navy sky, crimson buildings, white stars, gold accents */
+  --sky:        #b22234;
+  --sky-light:  #f5c6c8;
+  --sky-pale:   #fdf0f0;
+  --navy:       #1a2a5e;
+  --navy-mid:   #243570;
+  --navy-light: #d0d5e8;
+  --crimson:    #b22234;
+  --crimson-bg: #fdf0f0;
+  --cream:      #f9f0d0;
+  --teal-dark:  #1a2a5e;
+
+  /* Category colors */
+  --c-allday:      #5a6a8a;
+  --c-allday-bg:   #eaecf4;
+
+  --c-featured:    #1a2a5e;
+  --c-featured-bg: #eaecf4;
+  --c-featured-dk: #0f1a3d;
+
+  --c-class:       #b22234;
+  --c-class-bg:    #fdf0f0;
+
+  --c-affinity:    #b22234;
+  --c-affinity-bg: #fdf0f0;
+
+  --c-fitness:     #5C6F6F;
+  --c-fitness-bg:  #edf1f1;
+
+  --c-sport:       #c8a000;
+  --c-sport-bg:    #fdf8e0;
+  --c-sport-dk:    #6a5000;
+
+  /* UI */
+  --text:       #1a1a1a;
+  --text-mid:   #3d3d3d;
+  --text-muted: #666;
+  --bg:         #f0f0f5;
+  --card:       #ffffff;
+  --border:     rgba(0,0,0,0.10);
+  --border-lt:  rgba(0,0,0,0.06);
+  --r-sm: 6px; --r-md: 10px; --r-lg: 16px;
+  --sans:  -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --serif: Georgia, 'Times New Roman', serif;
+}
+
+body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.site-header {
+  background: #1a2a5e;
+  border-bottom: none;
+  overflow: hidden; position: relative;
+}
+.header-inner { padding: 2.5rem 1.5rem 2rem; position: relative; z-index: 1; text-align: center; }
+.header-eyebrow { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 10px; font-weight: 500; }
+.header-title { font-family: var(--serif); font-size: clamp(1.7rem, 5vw, 2.6rem); font-weight: normal; color: #fff; margin-bottom: 6px; line-height: 1.15; }
+.header-title strong { font-family: var(--sans); font-weight: 700; }
+.header-dates { font-size: 15px; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+.header-classes { font-size: 13px; color: rgba(255,255,255,0.65); font-style: italic; }
+.colonnade-strip { display: none; }
+
+/* embed mode */
+body.embed-mode .site-header { display: none; }
+body.embed-mode .admin-toggle-wrap { display: none; }
+body.embed-mode .edit-hint { display: none !important; }
+body.embed-mode .page-body { padding-top: 0.75rem; }
+
+/* public mode — clean view, no admin */
+body.public-mode .admin-toggle-wrap { display: none; }
+body.public-mode .edit-hint { display: none !important; }
+body.public-mode .admin-panel { display: none !important; }
+
+/* ═══════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════ */
+.page-body { max-width: 960px; margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
+
+/* ═══════════════════════════════════════
+   FILTER BARS
+═══════════════════════════════════════ */
+.filters-wrap {
+  background: var(--card); border: 1px solid var(--border-lt);
+  border-radius: var(--r-md); padding: 14px 16px;
+  margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 12px;
+}
+.filter-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.filter-row-label {
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted); white-space: nowrap; min-width: 36px;
+}
+.pill-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill {
+  padding: 7px 17px; border-radius: 24px; font-size: 14px;
+  cursor: pointer; border: 1.5px solid var(--border);
+  background: var(--card); color: var(--text-mid);
+  transition: all 0.13s; user-select: none; white-space: nowrap;
+}
+.pill:hover { border-color: var(--sky); color: var(--navy); }
+
+/* All-events pill (navy) */
+.pill.p-all-active { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 500; }
+
+/* Day pills (steel blue) */
+.pill.p-day-active { background: var(--c-featured); color: #fff; border-color: var(--c-featured); font-weight: 500; }
+
+/* Class pills (deep teal) */
+.pill.p-class-active { background: var(--c-class); color: #fff; border-color: var(--c-class); font-weight: 500; }
+
+/* Category pills — each uses its own brand color */
+.pill.p-cat-featured { background: var(--c-featured-dk); color: #fff; border-color: var(--c-featured-dk); font-weight: 500; }
+.pill.p-cat-class    { background: var(--c-class);       color: #fff; border-color: var(--c-class);       font-weight: 500; }
+.pill.p-cat-affinity { background: var(--c-affinity);    color: #fff; border-color: var(--c-affinity);    font-weight: 500; }
+.pill.p-cat-fitness  { background: var(--c-fitness);     color: #fff; border-color: var(--c-fitness);     font-weight: 500; }
+.pill.p-cat-sport    { background: var(--c-sport-dk);    color: #fff; border-color: var(--c-sport-dk);    font-weight: 500; }
+.pill.p-cat-allday   { background: var(--c-allday);      color: #fff; border-color: var(--c-allday);      font-weight: 500; }
+.pill.p-cat-family  { background: #2e7d5e;             color: #fff; border-color: #2e7d5e;             font-weight: 500; }
+
+/* ═══════════════════════════════════════
+   LEGEND
+═══════════════════════════════════════ */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); }
+.legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+.cal-export-btn {
+  font-size: 13px; padding: 6px 14px; border-radius: var(--r-sm);
+  border: 1.5px solid var(--sky); background: var(--sky-pale); color: var(--navy);
+  cursor: pointer; font-family: var(--sans); transition: all 0.13s; white-space: nowrap;
+}
+.cal-export-btn:hover { background: var(--sky-light); border-color: var(--c-featured-dk); }
+
+/* ═══════════════════════════════════════
+   DAY GROUP
+═══════════════════════════════════════ */
+.day-group { margin-bottom: 2.5rem; }
+.day-heading {
+  font-family: var(--serif); font-size: 22px; font-weight: normal;
+  color: var(--navy); border-bottom: 3px solid var(--crimson);
+  padding-bottom: 8px; margin-bottom: 14px;
+  display: flex; align-items: baseline; gap: 12px;
+}
+.day-count { font-family: var(--sans); font-size: 13px; color: var(--text-muted); font-weight: normal; }
+
+/* ═══════════════════════════════════════
+   EVENT CARD  (Sched-style)
+═══════════════════════════════════════ */
+.event-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Coloured header band */
+.card-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 16px;
+  color: #fff;
+}
+.card-header-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,0.35); flex-shrink: 0;
+}
+.card-title {
+  font-size: 17px; font-weight: 600; color: #fff;
+  line-height: 1.3; flex: 1;
+}
+/* header colors by category */
+.hd-featured { background: var(--c-featured); }
+.hd-featured .card-title { color: #fff; }
+.hd-featured .card-header-dot { background: rgba(255,255,255,0.25); }
+.hd-featured .action-btn { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); color: #fff; }
+.hd-featured .action-btn:hover { background: rgba(255,255,255,0.3); }
+
+.hd-class    { background: var(--c-class);    }
+.hd-affinity { background: var(--c-affinity); }
+.hd-fitness  { background: var(--c-fitness);  }
+.hd-allday   { background: var(--c-allday);   }
+
+.hd-sport { background: var(--c-sport); color: var(--c-sport-dk); }
+.hd-sport .card-title { color: var(--c-sport-dk); }
+.hd-sport .card-header-dot { background: rgba(90,62,0,0.18); }
+.hd-sport .action-btn { border-color: rgba(90,62,0,0.3); background: rgba(90,62,0,0.1); color: var(--c-sport-dk); }
+.hd-sport .action-btn:hover { background: rgba(90,62,0,0.2); }
+
+/* Card body */
+.card-body { padding: 12px 16px 14px; }
+
+.card-meta {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  margin-bottom: 8px;
+}
+.card-meta-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 14px; color: var(--text-mid);
+}
+/* SVG icon inline */
+.meta-icon { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.6; }
+
+.card-desc {
+  font-size: 15px; color: var(--text-mid); line-height: 1.6;
+  margin-bottom: 10px;
+}
+.card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.ctag {
+  font-size: 13px; padding: 3px 11px; border-radius: 14px;
+  font-weight: 500; text-decoration: none; display: inline-block;
+}
+.ctag-featured { background: var(--c-featured-bg); color: var(--c-featured-dk); }
+.ctag-class    { background: var(--c-class-bg);    color: var(--c-class);       }
+.ctag-affinity { background: var(--c-affinity-bg); color: var(--c-affinity);    }
+.ctag-fitness  { background: var(--c-fitness-bg);  color: var(--c-fitness);     }
+.ctag-sport    { background: var(--c-sport-bg);    color: var(--c-sport-dk);    }
+.ctag-allday   { background: var(--c-allday-bg);   color: var(--c-allday);      }
+.ctag-allalum  { background: var(--navy-light);    color: var(--navy);          }
+.ctag-opentoall{ background: #e8f4f0;              color: #2a5c54;              }
+.ctag-classyr  { background: var(--c-class-bg);    color: var(--c-class);       }
+.ctag-sub      { background: #fef9ec; color: #7a5500; }
+
+/* card-level admin actions */
+.card-actions { display: none; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.admin-open .event-card:hover .card-actions { display: flex; }
+.action-btn {
+  font-size: 12px; padding: 4px 11px; border-radius: 5px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.18);
+  font-family: var(--sans); transition: all 0.12s; white-space: nowrap; color: #fff;
+}
+.action-btn:hover { background: rgba(255,255,255,0.35); }
+
+/* ═══════════════════════════════════════
+   INLINE EDIT FORM
+═══════════════════════════════════════ */
+.inline-edit {
+  background: #f3f8fb; border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 16px; margin-bottom: 14px;
+}
+.inline-edit h4 { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 12px; }
+.form-grid       { display: grid; grid-template-columns: 1fr 1fr;         gap: 10px; margin-bottom: 10px; }
+.form-grid.full  { grid-template-columns: 1fr; }
+.form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+.form-field { display: flex; flex-direction: column; gap: 4px; }
+.form-field label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; }
+.form-field input, .form-field select, .form-field textarea {
+  font-size: 14px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--r-sm);
+  background: #fff; color: var(--text); font-family: var(--sans); outline: none; transition: border-color 0.12s;
+}
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--sky); }
+.form-field textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+.checks-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 8px; display: block; }
+.checks-grid  { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.check-item   { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
+.check-item input[type="checkbox"] { cursor: pointer; accent-color: var(--c-class); width: 15px; height: 15px; }
+.inline-edit-actions { display: flex; gap: 8px; margin-top: 12px; }
+.save-btn {
+  padding: 9px 22px; background: var(--navy); color: #fff;
+  border: none; border-radius: var(--r-sm); font-size: 14px; cursor: pointer; font-family: var(--sans);
+}
+.save-btn:hover { opacity: 0.85; }
+.cancel-btn {
+  padding: 9px 15px; background: none; color: var(--text-muted);
+  border: 1px solid var(--border); border-radius: var(--r-sm); font-size: 14px; cursor: pointer; font-family: var(--sans);
+}
+.cancel-btn:hover { background: #fff; }
+
+/* ═══════════════════════════════════════
+   ADMIN PANEL
+═══════════════════════════════════════ */
+.admin-toggle-wrap {
+  text-align: right; margin-bottom: 1rem;
+  display: flex; justify-content: flex-end; gap: 12px; align-items: center;
+}
+.admin-toggle {
+  font-size: 13px; color: var(--text-muted); cursor: pointer;
+  background: none; border: none; padding: 0; text-decoration: underline; font-family: var(--sans);
+}
+.admin-toggle:hover { color: var(--navy); }
+.export-btn {
+  font-size: 13px; padding: 6px 15px; border-radius: var(--r-sm);
+  border: 1px solid var(--border); background: var(--card); color: var(--text-mid);
+  cursor: pointer; font-family: var(--sans); transition: all 0.12s;
+}
+.export-btn:hover { background: var(--sky-light); color: var(--navy); border-color: var(--sky); }
+.edit-hint { display: none; font-size: 13px; color: var(--text-muted); text-align: right; margin-top: -6px; margin-bottom: 1rem; font-style: italic; }
+
+.admin-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1.75rem; display: none;
+}
+.admin-panel.open { display: block; }
+.admin-panel h2 {
+  font-family: var(--serif); font-size: 19px; font-weight: normal; color: var(--navy);
+  margin-bottom: 1.2rem; padding-bottom: 10px; border-bottom: 1px solid var(--border-lt);
+}
+.add-btn {
+  padding: 9px 22px; background: var(--navy); color: #fff;
+  border: none; border-radius: var(--r-md); font-size: 14px; cursor: pointer; font-family: var(--sans);
+}
+.add-btn:hover { opacity: 0.85; }
+
+/* embed block */
+.embed-block { margin-top: 1.5rem; padding-top: 1.4rem; border-top: 1px solid var(--border-lt); }
+.embed-block h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; color: var(--navy); }
+.embed-block p  { font-size: 13px; color: var(--text-muted); margin-bottom: 9px; line-height: 1.55; }
+.embed-note     { font-size: 12.5px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
+.embed-code {
+  font-family: monospace; font-size: 12px; background: #f4f4f4; border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 11px; color: var(--text-mid); line-height: 1.6; word-break: break-all; white-space: pre-wrap;
+}
+.class-links h4 { font-size: 13.5px; font-weight: 500; margin: 13px 0 8px; color: var(--text-mid); }
+.class-link-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 11px; background: #f8f8f8; border-radius: var(--r-sm); margin-bottom: 4px; font-size: 12.5px;
+}
+.class-link-item span { font-family: monospace; color: var(--navy-mid); }
+.copy-small {
+  font-size: 11.5px; padding: 3px 10px; border: 1px solid var(--border);
+  border-radius: 4px; background: var(--card); cursor: pointer; color: var(--text-muted); transition: all 0.1s;
+}
+.copy-small:hover { background: var(--sky-light); color: var(--navy); }
+
+/* JSON modal */
+.json-modal-bg {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  z-index: 100; align-items: flex-start; justify-content: center; padding-top: 5vh;
+}
+.json-modal-bg.open { display: flex; }
+.json-modal {
+  background: var(--card); border-radius: var(--r-lg); padding: 1.5rem;
+  max-width: 700px; width: 95vw; max-height: 88vh;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.json-modal h3 { font-size: 16px; font-weight: 500; color: var(--navy); }
+.json-modal p  { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+.json-textarea {
+  flex: 1; min-height: 280px; font-family: monospace; font-size: 12px;
+  padding: 10px; border: 1px solid var(--border); border-radius: var(--r-sm);
+  background: #f8f8f8; color: var(--text); resize: vertical; line-height: 1.5; outline: none;
+}
+.json-textarea:focus { border-color: var(--sky); }
+.json-modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.json-copy-btn   { padding: 8px 18px; background: var(--navy);    color: #fff; border: none; border-radius: var(--r-sm); font-size: 14px; cursor: pointer; font-family: var(--sans); }
+.json-copy-btn:hover { opacity: 0.85; }
+.json-import-btn { padding: 8px 18px; background: var(--c-class); color: #fff; border: none; border-radius: var(--r-sm); font-size: 14px; cursor: pointer; font-family: var(--sans); }
+.json-import-btn:hover { opacity: 0.85; }
+.json-close-btn  { padding: 8px 15px; background: none; color: var(--text-muted); border: 1px solid var(--border); border-radius: var(--r-sm); font-size: 14px; cursor: pointer; font-family: var(--sans); }
+.json-close-btn:hover { background: #f4f4f4; }
+
+/* empty */
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: 16px; }
+
+/* ═══════════════════════════════════════
+   TAB BAR — pill style
+═══════════════════════════════════════ */
+.tab-bar {
+  display: flex; gap: 8px;
+  margin-bottom: 1.25rem;
+}
+.tab-btn {
+  padding: 8px 18px; font-size: 14px; font-weight: 500;
+  border: 1.5px solid var(--border); background: var(--card);
+  cursor: pointer; color: var(--text-muted); font-family: var(--sans);
+  border-radius: 24px; transition: all 0.13s; white-space: nowrap;
+}
+.tab-btn:hover { border-color: var(--sky); color: var(--navy); }
+.tab-btn.tab-active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.tab-btn.tab-transport { border-color: #b22234; color: #8a1020; }
+.tab-btn.tab-transport svg { stroke: #8a1020; }
+.tab-btn.tab-transport:hover { background: #fdf0f0; }
+.tab-btn.tab-transport.tab-active { background: #b22234; color: #fff; border-color: #b22234; }
+.tab-btn.tab-transport.tab-active svg { stroke: #fff; }
+.tab-btn.tab-map {
+  border-color: var(--teal-dark); color: var(--teal-dark);
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.tab-btn.tab-map svg { stroke: var(--teal-dark); }
+.tab-btn.tab-map:hover { background: #e6f2f5; border-color: var(--teal-dark); color: var(--teal-dark); }
+
+/* compact filter bar */
+.filters-compact { gap: 10px; }
+.filter-row-selects { gap: 16px; flex-wrap: wrap; }
+.filter-select-group { display: flex; align-items: center; gap: 8px; }
+.filter-select {
+  padding: 6px 28px 6px 10px; font-size: 14px; font-family: var(--sans);
+  border: 1.5px solid var(--border); border-radius: var(--r-sm);
+  background: var(--card); color: var(--text-mid); cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 9px center;
+  transition: border-color 0.13s;
+}
+.filter-select:hover { border-color: var(--sky); }
+.filter-select:focus { outline: none; border-color: var(--c-featured-dk); }
+.filter-select.select-active { border-color: var(--c-class); color: var(--navy); font-weight: 500; }
+
+/* ═══════════════════════════════════════
+   TRANSPORTATION PANEL
+═══════════════════════════════════════ */
+.transport-wrap { display: flex; flex-direction: column; gap: 1.5rem; }
+.transport-note {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--sky-pale); border: 1px solid var(--sky-light);
+  border-radius: var(--r-md); padding: 12px 16px;
+  font-size: 14px; color: var(--navy-mid); line-height: 1.6;
+}
+.transport-note span { flex: 1; }
+.transport-day { background: var(--card); border: 1px solid var(--border-lt); border-radius: var(--r-lg); overflow: hidden; }
+.transport-day-heading {
+  font-family: var(--serif); font-size: 18px; font-weight: normal;
+  color: #fff; background: #1a2a5e;
+  padding: 12px 18px;
+}
+.transport-table { display: flex; flex-direction: column; }
+.tr-row {
+  display: grid; grid-template-columns: 160px 1fr;
+  gap: 12px; padding: 12px 18px;
+  border-bottom: 1px solid var(--border-lt); align-items: start;
+}
+.tr-row:last-child { border-bottom: none; }
+.tr-row.tr-highlight { background: #fdf6e8; }
+.tr-time {
+  font-size: 13px; font-weight: 600; color: var(--navy);
+  padding-top: 1px; line-height: 1.4;
+}
+.tr-desc { font-size: 14px; color: var(--text-mid); line-height: 1.55; }
+.transport-hotels {
+  background: var(--card); border: 1px solid var(--border-lt);
+  border-radius: var(--r-lg); padding: 18px 20px;
+}
+.transport-hotels-heading {
+  font-size: 13px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px;
+}
+.transport-hotels-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px 16px;
+}
+.transport-hotels-grid span { font-size: 13px; color: var(--text-mid); }
+
+@media (max-width: 580px) {
+  .tr-row { grid-template-columns: 1fr; gap: 4px; }
+  .tr-time { font-size: 12px; }
+}
+@media (max-width: 580px) {
+  .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+  .card-title { font-size: 15px; }
+  .card-meta-item { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <div class="header-eyebrow">W&L Alumni Engagement</div>
+    <img src="https://advancement.wlu.edu/www/images/Events/FSF/FSF%20Five-Star%20Festival%202026%20Logo%20(5).png" alt="W&L Five-Star Festival 2026" style="height:180px;width:auto;margin-bottom:0.75rem;display:block;margin-left:auto;margin-right:auto;" />
+    <div class="header-dates">September 18–19, 2026 &nbsp;·&nbsp; Lexington, Virginia</div>
+  </div>
+  <div class="colonnade-strip"></div>
+</header>
+
+<div class="page-body">
+
+  <div class="admin-toggle-wrap">
+    <button class="export-btn" onclick="openExport()">&#8595; Export / Import JSON</button>
+    <button class="admin-toggle" onclick="toggleAdmin()">&#9881; Manage events</button>
+  </div>
+  <div class="edit-hint" id="editHint">Hover any event card to edit or delete it.</div>
+
+  <!-- ADD EVENT PANEL -->
+  <div class="admin-panel" id="adminPanel">
+    <h2>Add a new event</h2>
+    <div class="form-grid">
+      <div class="form-field"><label>Event title</label><input id="f-title" placeholder="e.g. Class of 2001 Reception" /></div>
+      <div class="form-field"><label>Location / venue</label><input id="f-location" placeholder="e.g. Lee House Front Lawn" /></div>
+    </div>
+    <div class="form-grid three">
+      <div class="form-field"><label>Date</label>
+        <select id="f-date">
+          <option value="Friday, September 18">Friday, September 18</option>
+          <option value="Saturday, September 19">Saturday, September 19</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Start time</label><input id="f-start" placeholder="e.g. 6:30 PM" /></div>
+      <div class="form-field"><label>End time</label><input id="f-end" placeholder="e.g. 9:30 PM" /></div>
+    </div>
+    <div class="form-grid full">
+      <div class="form-field"><label>Description (optional)</label><textarea id="f-desc" placeholder="Shown below the event title on the schedule…"></textarea></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-field"><label>Category</label>
+        <select id="f-cat">
+          <option value="featured">Featured (F)</option>
+          <option value="class">Class Specific (C)</option>
+          <option value="affinity">Affinity (A)</option>
+          <option value="fitness">Fitness (T)</option>
+          <option value="sport">Sporting Event (S)</option>
+          <option value="other">Other</option>
+          <option value="family">Family Friendly</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Sub-label / note (optional)</label><input id="f-type" placeholder="e.g. By Invitation Only" /></div>
+    </div>
+    <span class="checks-label">Class tags — select all that apply</span>
+    <div class="checks-grid" id="classChecks"></div>
+    <button class="add-btn" onclick="addEvent()">Add event</button>
+
+    <div class="embed-block">
+      <h3>Embed on your website</h3>
+      <p>In Squarespace, add a <strong>Code Block</strong> and paste the snippet. <code>?embed=1</code> hides the header so only the filters and schedule display.</p>
+      <div class="embed-code" id="embedAll"></div>
+      <p class="embed-note">To pre-filter by class: <code>?embed=1&amp;class=2001</code></p>
+      <div class="class-links" id="classLinksList"></div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn tab-active" id="tab-schedule" onclick="switchTab('schedule')">
+      <svg style="width:13px;height:13px;vertical-align:-1px;margin-right:5px;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M6 7h8M6 10h8M6 13h5"/></svg>
+      Event Schedule
+    </button>
+    <button class="tab-btn tab-transport" id="tab-transportation" onclick="switchTab('transportation')">
+      <svg style="width:13px;height:13px;vertical-align:-1px;margin-right:5px;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="16" height="9" rx="2"/><path d="M5 7V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2"/><circle cx="6" cy="16" r="1.5"/><circle cx="14" cy="16" r="1.5"/></svg>
+      Transportation
+    </button>
+
+  </div>
+
+  <!-- SCHEDULE PANEL -->
+  <div id="panel-schedule">
+
+  <!-- FILTER BARS -->
+  <div class="filters-wrap">
+    <div class="filter-row">
+      <span class="filter-row-label">Day</span>
+      <div class="pill-group" id="dayPills"></div>
+    </div>
+  </div>
+
+  <div class="legend" style="justify-content:flex-end;">
+    <div>
+      <button class="cal-export-btn" onclick="exportCalendar()" id="calBtn">
+        <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:5px;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="16" height="14" rx="2"/><path d="M2 8h16M6 2v4M14 2v4"/></svg>Add to Calendar
+      </button>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div id="schedule"></div>
+
+  </div><!-- end panel-schedule -->
+
+  <!-- TRANSPORTATION PANEL -->
+  <div id="panel-transportation" style="display:none;">
+    <div class="transport-wrap">
+      <div style="text-align:center; padding: 4rem 2rem;">
+        <svg style="width:48px;height:48px;color:#1e2d6e;opacity:0.3;margin-bottom:1rem;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="7" width="16" height="9" rx="2"/><path d="M5 7V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2"/><circle cx="6" cy="16" r="1.5"/><circle cx="14" cy="16" r="1.5"/></svg>
+        <h3 style="font-family:Georgia,serif; font-weight:normal; font-size:1.4rem; color:#1e2d6e; margin-bottom:0.5rem;">Transportation Information Coming Soon</h3>
+        <p style="color:#888; font-size:14px; max-width:360px; margin:0 auto;">Shuttle schedules and parking details will be posted here closer to the event.</p>
+      </div>
+    </div>
+  </div><!-- end panel-transportation -->
+</div>
+
+<!-- JSON MODAL -->
+<div class="json-modal-bg" id="jsonModal">
+  <div class="json-modal">
+    <h3>Export / Import event data (JSON)</h3>
+    <p>Copy this JSON to save your edits. To make permanent, replace the <code>let events = [...]</code> array in the HTML file. Or paste edited JSON and click <strong>Import</strong>.</p>
+    <textarea class="json-textarea" id="jsonTextarea" spellcheck="false"></textarea>
+    <div class="json-modal-actions">
+      <button class="json-copy-btn"   onclick="copyJson()">Copy JSON</button>
+      <button class="json-import-btn" onclick="importJson()">Import JSON</button>
+      <button class="json-close-btn"  onclick="closeExport()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const HOSTED_URL = window.location.href.split('?')[0];
+
+const DAYS = ['Friday, September 18','Saturday, September 19'];
+const REUNION_CLASSES = ['1961','1966','1971'];
+const ALL_CLASS_TAGS  = ['Campus-Wide'];
+
+const CAT = {
+  featured: { label:'Featured',      hd:'hd-featured', tag:'ctag-featured' },
+  class:    { label:'Class Specific', hd:'hd-class',    tag:'ctag-class'    },
+  affinity: { label:'Affinity',       hd:'hd-affinity', tag:'ctag-affinity' },
+  fitness:  { label:'Fitness',        hd:'hd-fitness',  tag:'ctag-fitness'  },
+  sport:    { label:'Sporting Event', hd:'hd-sport',    tag:'ctag-sport'    },
+  other:    { label:'Other',        hd:'hd-allday', tag:'ctag-allday'   },
+  family:   { label:'Family Friendly', hd:'hd-family', tag:'ctag-family'   },
+};
+
+let events = [
+  // ── FRIDAY SEPTEMBER 18 ──
+  {id:1,  title:"University Store Open House",                                                               location:"Elrod Commons",                     date:"Friday, September 18",   start:"8:00 AM",  end:"7:00 PM",  cat:"other",    classes:["Campus-Wide"], type:"",  desc:"Check behind your nametag for a University Store coupon. Valid for Five-Star Festival weekend only, in-store purchases."},
+  {id:2,  title:"Check-In / Registration Open",                                                              location:"Elrod Commons",                     date:"Friday, September 18",   start:"9:00 AM",  end:"5:00 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:""},
+  {id:3,  title:"Shuttle Service",                                                                           location:"TBA",                               date:"Friday, September 18",   start:"9:00 AM",  end:"9:30 PM",  cat:"other",    classes:["Campus-Wide"], type:"",  desc:"Shuttle Service to/from Hampton Inn and the Wingate Hotel to campus. Shuttles run every 20 minutes."},
+  {id:4,  title:"Empowering Lifelong Learners through AI Tools",                                             location:"Stackhouse Theater, Elrod Commons", date:"Friday, September 18",   start:"10:00 AM", end:"10:45 AM", cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Description coming soon!"},
+  {id:5,  title:"Student Experience Panel Discussion",                                                       location:"Stackhouse Theater, Elrod Commons", date:"Friday, September 18",   start:"11:00 AM", end:"11:45 AM", cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Conversation with student leaders who will share their experience here on campus and provide insight on W&L today. Moderated by Alumni and Career Services."},
+  {id:6,  title:"Lunch and Learn in the Marketplace",                                                        location:"Elrod Commons, Lower Level",        date:"Friday, September 18",   start:"12:00 PM", end:"2:00 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:"All are invited to gather for a casual drop-in lunch in the Marketplace for a W&L Student Athlete Conversation with guest(s) Athletic Director Jan Hathorn, Associate Athletic Director Terlynn Olds, Coach(s), team faculty advisor, student-athletes. Connect with current students and reconnect with one another."},
+  {id:7,  title:"Five-Star Festival Opening Assembly",                                                       location:"Stackhouse Theater, Elrod Commons", date:"Friday, September 18",   start:"4:30 PM",  end:"5:15 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Recognition of 55th, 60th and 65th reunion classes and a Keynote Conversation Between John McCardell '71 and Provost Lena Hill: The State and Promise of the Liberal Arts."},
+  {id:8,  title:"Welcome Reception",                                                                         location:"TBA",                               date:"Friday, September 18",   start:"5:30 PM",  end:"7:00 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:"All Five-Star attendees will gather for a welcome reception, honoring the milestone classes of 1971, 1966 and 1961. Hors d'oeuvres heavy enough for dinner."},
+  {id:9,  title:"Five-Star Festival Weekend Shabbat",                                                        location:"Hillel House",                      date:"Friday, September 18",   start:"6:00 PM",  end:"8:00 PM",  cat:"affinity", classes:["Campus-Wide"], type:"",  desc:"W&L Hillel invites those here for Five-Star Festival to join us for Shabbat. Services begin at 6 pm, followed by dinner at 6:40 pm. Drop-ins welcome. Email hillel@wlu.edu."},
+  {id:21, title:"Five-Star Festival Grand Finale",                                                           location:"Memorial Gate Plaza",               date:"Friday, September 18",   start:"6:30 PM",  end:"8:30 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:"We'll walk together from the Chapel down to Memorial Gate Plaza. Delightful finale celebration under the stars with all attendees. Dinner and a special student performance to close out a fabulous weekend."},
+  {id:10, title:"Five-Star Festival Soiree",                                                                 location:"TBA",                               date:"Friday, September 18",   start:"7:00 PM",  end:"9:00 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Extend your evening celebration, join us under the stars to cap off the first day of Five-Star Festival. Nostalgic music, desserts and coffee."},
+  // ── SATURDAY SEPTEMBER 19 ──
+  {id:11, title:"Check-In / Registration Open",                                                              location:"Elrod Commons",                     date:"Saturday, September 19", start:"9:00 AM",  end:"12:00 PM", cat:"featured", classes:["Campus-Wide"], type:"",  desc:""},
+  {id:12, title:"Shuttle Service",                                                                           location:"TBA",                               date:"Saturday, September 19", start:"9:00 AM",  end:"9:00 PM",  cat:"other",    classes:["Campus-Wide"], type:"",  desc:"Shuttle Service to/from Hampton Inn and the Wingate Hotel to campus. Shuttles run every 20 minutes."},
+  {id:13, title:"Morning Brunch in the Marketplace",                                                         location:"Elrod Commons, Lower Level",        date:"Saturday, September 19", start:"9:00 AM",  end:"10:45 AM", cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Join us for a hearty delicious meal to fuel yourself for the day."},
+  {id:14, title:"University Store Open House",                                                               location:"Elrod Commons",                     date:"Saturday, September 19", start:"10:00 AM", end:"5:30 PM",  cat:"other",    classes:["Campus-Wide"], type:"",  desc:"Check behind your nametag for a University Store coupon. Valid for Five-Star Festival weekend only, in-store purchases."},
+  {id:15, title:"University Update and Award Ceremony",                                                      location:"Stackhouse Theater, Elrod Commons", date:"Saturday, September 19", start:"11:00 AM", end:"11:45 AM", cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Hear university updates followed by the Distinguished Alumni Awards and Philanthropy Awards. (short break before the next programming session)"},
+  {id:16, title:"What in the World: W&L Faculty Share Expertise on the World's Hotspots and U.S Interests",  location:"Stackhouse Theater, Elrod Commons", date:"Saturday, September 19", start:"11:45 AM", end:"12:30 PM", cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Hear from Washington and Lee faculty as they break down today's most pressing global hotspots and explain how these issues intersect with U.S. interests, bringing clarity, context, and insight to a rapidly changing world."},
+  {id:17, title:"Progress in Progress: The Renovation of the University Chapel and Virtual Campus Tour",      location:"University Chapel",                 date:"Saturday, September 19", start:"1:00 PM",  end:"2:00 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:"An in-depth discussion related to the recent University Chapel renovation project and history of the building's renovations from construction to the present day. Guided tour of the chapel and exhibitions by Matt Davis, with key takeaways for festival attendees on the items alumni can give to enhance the history collections. Matt will also provide an update on plans for the new Institutional History Museum. Stay for a virtual tour of newly renovated and constructed campus facilities."},
+  {id:18, title:"Milestone Afternoon Class Gatherings",                                                      location:"TBA",                               date:"Saturday, September 19", start:"2:30 PM",  end:"4:30 PM",  cat:"class",    classes:["1961","1966","1971"], type:"", desc:"Reunion classes of 1971, 1966 and 1961 will gather for a casual afternoon gathering. Enjoy the afternoon with your classmates to reminisce and reconnect. Non-reunion classes are encouraged to visit Café '77 for an afternoon treat."},
+  {id:19, title:"Five-Star Festival Group Photos",                                                           location:"University Chapel",                 date:"Saturday, September 19", start:"6:00 PM",  end:"6:15 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Gather on the plaza for an all-class photo and milestone reunion photos. Photos will be moved indoors in the event of inclement weather."},
+  {id:20, title:"Celebration of Life Service",                                                               location:"University Chapel",                 date:"Saturday, September 19", start:"6:15 PM",  end:"6:30 PM",  cat:"featured", classes:["Campus-Wide"], type:"",  desc:"Service to remember those from the classes of 1971, 1966 and 1961 who are no longer with us."},
+];;
+
+let activeDay   = 'all';
+let activeClass = 'all';
+let activeCat   = 'all';
+let nextId = 22;
+
+const WORKER_URL = 'https://aw26schedule.tmeeker.workers.dev/';
+const BOARD_ID_PARAM = new URLSearchParams(window.location.search).get('board') || '18414321921';
+
+function getParam(k) { return new URLSearchParams(window.location.search).get(k); }
+
+/* ── TAB SWITCHER ── */
+function switchTab(tab) {
+  document.getElementById('panel-schedule').style.display       = tab === 'schedule'      ? '' : 'none';
+  document.getElementById('panel-transportation').style.display  = tab === 'transportation' ? '' : 'none';
+  const sBtn = document.getElementById('tab-schedule');
+  const tBtn = document.getElementById('tab-transportation');
+  sBtn.classList.toggle('tab-active', tab === 'schedule');
+  tBtn.classList.toggle('tab-active', tab === 'transportation');
+}
+
+/* ── MONDAY COLUMN MAP ──
+   Column IDs confirmed from live board response. */
+function parseMonday(data) {
+  try {
+    const items = (data.data || data).boards[0].items_page.items;
+
+    return items.map((item, idx) => {
+      const cv = {};
+      item.column_values.forEach(c => { cv[c.id] = c.text || ''; });
+
+      const title    = item.name || '';
+      const date     = (cv['text_mm3jpdk'] || '').trim();
+      const start    = (cv['text_mm3jrqh2'] || '').trim();
+      const end      = (cv['text_mm3jkhhz'] || '').trim();
+      const location = (cv['text_mm3j91dg'] || '').trim();
+      const catRaw   = (cv['dropdown_mm3jqm9h'] || 'featured').trim().toLowerCase();
+      // Monday may return multiple values comma-separated e.g. "featured, family"
+      const catParts = catRaw.split(',').map(s => s.trim().replace(/\s+/g,'-')).filter(Boolean);
+      const family   = catParts.includes('family');
+      const cat      = catParts.find(c => c !== 'family') || catParts[0] || 'featured';
+      const classes  = (cv['text_mm3j29t2'] || 'Campus-Wide').trim();
+      const subLabel = (cv['text_mm3jrx8t'] || '').trim();
+      const desc     = (cv['long_text_mm3j8ery'] || '').trim();
+
+      const classArr = classes.split(',').map(s => s.trim()).filter(Boolean);
+
+      return {
+        id: idx + 1,
+        title, date, start, end, location,
+        cat: cat || 'featured',
+        family,
+        classes: classArr.length ? classArr : ['Campus-Wide'],
+        type: subLabel,
+        desc,
+      };
+    }).filter(e => e.title);
+  } catch(err) {
+    console.warn('Monday parse error:', err);
+    return null;
+  }
+}
+
+function showLoadingState() {
+  document.getElementById('schedule').innerHTML =
+    '<div class="empty-state" style="opacity:0.5;">Loading schedule…</div>';
+}
+
+async function init() {
+  if (getParam('embed') === '1') document.body.classList.add('embed-mode');
+  if (getParam('public') === '1') document.body.classList.add('public-mode');
+  activeDay   = getParam('day')   || 'all';
+  activeClass = getParam('class') || 'all';
+  activeCat   = getParam('cat')   || 'all';
+  buildClassChecks();
+  buildDayPills();
+  buildClassPills();
+  buildCatPills();
+  buildEmbedCodes();
+
+  // Try to load from Monday via Worker
+  showLoadingState();
+  try {
+    const res = await fetch(WORKER_URL + '?board=' + (new URLSearchParams(window.location.search).get('board') || '18414321921'));
+    if (!res.ok) throw new Error('Worker returned ' + res.status);
+    const json = await res.json();
+    const fetched = parseMonday(json.data || json);
+    if (fetched && fetched.length > 0) {
+      events = fetched;
+      nextId = Math.max(...events.map(e => e.id)) + 1;
+      console.log(`Loaded ${events.length} events from Monday.`);
+    } else {
+      console.warn('Monday returned no events — using local data.');
+    }
+  } catch(err) {
+    console.warn('Could not reach Monday Worker, using local data:', err.message);
+  }
+
+  render();
+}
+
+/* ── PILLS ── */
+function buildDayPills() {
+  const c = document.getElementById('dayPills');
+  c.innerHTML = '';
+  const allBtn = mkPill('All days', activeDay === 'all', 'p-all-active', () => setDay('all'));
+  c.appendChild(allBtn);
+  DAYS.forEach(d => {
+    const btn = mkPill(d, activeDay === d, 'p-day-active', () => setDay(d));
+    c.appendChild(btn);
+  });
+}
+
+function buildClassPills() {
+  const sel = document.getElementById('classSelect');
+  if (!sel) return;
+  sel.innerHTML = '<option value="all">All classes</option>';
+  REUNION_CLASSES.forEach(yr => {
+    const opt = document.createElement('option');
+    opt.value = yr; opt.textContent = 'Class of ' + yr;
+    if (activeClass === yr) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  if (activeClass === 'all') sel.value = 'all';
+  sel.classList.toggle('select-active', activeClass !== 'all');
+}
+
+function buildCatPills() {
+  const sel = document.getElementById('catSelect');
+  if (!sel) return;
+  sel.value = activeCat;
+  sel.classList.toggle('select-active', activeCat !== 'all');
+}
+
+function mkPill(label, active, activeClass, fn) {
+  const btn = document.createElement('button');
+  btn.className = 'pill' + (active ? ' ' + activeClass : '');
+  btn.textContent = label;
+  btn.onclick = fn;
+  return btn;
+}
+
+function setDay(d) {
+  activeDay = d;
+  const url = new URL(window.location.href);
+  url.searchParams.set('day', d);
+  window.history.replaceState({}, '', url);
+  buildDayPills(); render();
+}
+
+function setClass(cls) {
+  activeClass = cls;
+  const url = new URL(window.location.href);
+  url.searchParams.set('class', cls);
+  window.history.replaceState({}, '', url);
+  buildClassPills(); render();
+}
+
+function setCat(cat) {
+  activeCat = cat;
+  const url = new URL(window.location.href);
+  url.searchParams.set('cat', cat);
+  window.history.replaceState({}, '', url);
+  buildCatPills(); render();
+}
+
+/* ── FILTER ── */
+function visibleEvents() {
+  return events.filter(e => {
+    const dayOk = activeDay === 'all' || e.date === activeDay;
+    const catOk = activeCat === 'all'
+      || (activeCat === 'family' ? e.family || e.cat === 'family' : e.cat === activeCat);
+    let classOk;
+    if (activeClass === 'all') {
+      classOk = true;
+    } else {
+      classOk = e.classes.includes('All Alumni') || e.classes.includes(activeClass);
+    }
+    return dayOk && catOk && classOk;
+  });
+}
+
+/* ── TIME SORT ── */
+function timeToMinutes(t) {
+  if (!t || t === 'TBA') return -1; // TBA sorts to top
+  const clean = t.replace(/\u00a0/g, ' ').trim();
+  const m = clean.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if (!m) return 9999;
+  let h = parseInt(m[1]), min = parseInt(m[2]);
+  const isPM = m[3].toUpperCase() === 'PM';
+  if (isPM && h !== 12) h += 12;
+  if (!isPM && h === 12) h = 0;
+  return h * 60 + min;
+}
+
+/* ── RENDER ── */
+function render() {
+  const visible = visibleEvents();
+  const container = document.getElementById('schedule');
+  if (!visible.length) {
+    container.innerHTML = '<div class="empty-state">No events found for this filter combination.</div>';
+    return;
+  }
+
+  // Group by day, preserving DAYS order
+  const dayOrder = DAYS;
+  const byDay = {};
+  visible.forEach(e => { if (!byDay[e.date]) byDay[e.date] = []; byDay[e.date].push(e); });
+  const orderedDays = dayOrder.filter(d => byDay[d]);
+
+  container.innerHTML = orderedDays.map(day => {
+    const evs = byDay[day].sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
+    return `<div class="day-group">
+      <div class="day-heading">${day}<span class="day-count">${evs.length} event${evs.length!==1?'s':''}</span></div>
+      ${evs.map(renderCard).join('')}
+    </div>`;
+  }).join('');
+}
+
+/* Calendar SVG icon */
+const ICON_CAL = `<svg class="meta-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="16" height="14" rx="2"/><path d="M2 8h16M6 2v4M14 2v4"/></svg>`;
+/* Pin SVG icon */
+const ICON_PIN = `<svg class="meta-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2a5 5 0 0 1 5 5c0 3.5-5 11-5 11S5 10.5 5 7a5 5 0 0 1 5-5z"/><circle cx="10" cy="7" r="2"/></svg>`;
+
+function fmtTime(s, e) {
+  if (!s || s === 'TBA') return 'TBA';
+  // Ensure times don't line-break mid-token by using non-breaking spaces
+  const fmt = t => t.replace(/ /g, '\u00a0');
+  return e ? fmt(s) + '\u00a0–\u00a0' + fmt(e) : fmt(s);
+}
+
+function renderCard(e) {
+  const meta  = CAT[e.cat] || CAT.other;
+  const timeStr = fmtTime(e.start, e.end);
+  const loc   = e.location || '';
+  const desc  = e.desc ? `<div class="card-desc">${e.desc}</div>` : '';
+
+  const classTags = e.classes
+    .map(c => {
+      if (c === 'All Alumni')   return `<span class="ctag ctag-allalum">All alumni</span>`;
+      if (c === 'Campus-Wide')  return '';
+      return `<span class="ctag ctag-classyr">Class of ${c}</span>`;
+    })
+    .join('');
+  const catTag  = e.cat === 'other' ? '' : `<span class="ctag ${meta.tag}">${meta.label}</span>`;
+  const famTag  = (e.family && e.cat !== 'family') ? `<span class="ctag ctag-family">Family Friendly</span>` : '';
+  const typeTag = e.type ? `<span class="ctag ctag-sub">${e.type}</span>` : '';
+
+  return `<div class="event-card" id="card-${e.id}">
+    <div class="card-header ${meta.hd}">
+      <div class="card-header-dot"></div>
+      <div class="card-title">${e.title}</div>
+      <div class="card-actions">
+        <button class="action-btn" onclick="editEvent(${e.id})">Edit</button>
+        <button class="action-btn" onclick="deleteEvent(${e.id})">Delete</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="card-meta-item">${ICON_CAL} ${timeStr}</div>
+        ${loc ? `<div class="card-meta-item">${ICON_PIN} ${loc}</div>` : ''}
+      </div>
+      ${desc}
+      <div class="card-tags">${classTags}${catTag}${famTag}${typeTag}</div>
+    </div>
+  </div>`;
+}
+
+/* ── INLINE EDIT ── */
+function editEvent(id) {
+  if (document.getElementById('edit-'+id)) return;
+  const e = events.find(ev => ev.id === id); if (!e) return;
+  document.getElementById('card-'+id).style.opacity = '0.4';
+  const catOpts  = Object.entries(CAT).map(([k,v]) => `<option value="${k}" ${e.cat===k?'selected':''}>${v.label}</option>`).join('');
+  const dateOpts = DAYS.map(d => `<option value="${d}" ${e.date===d?'selected':''}>${d}</option>`).join('');
+  const form = document.createElement('div');
+  form.className = 'inline-edit'; form.id = 'edit-'+id;
+  form.innerHTML = `
+    <h4>Editing: ${esc(e.title)}</h4>
+    <div class="form-grid">
+      <div class="form-field"><label>Title</label><input id="ef-title-${id}" value="${esc(e.title)}" /></div>
+      <div class="form-field"><label>Location</label><input id="ef-loc-${id}" value="${esc(e.location||'')}" /></div>
+    </div>
+    <div class="form-grid three">
+      <div class="form-field"><label>Date</label><select id="ef-date-${id}">${dateOpts}</select></div>
+      <div class="form-field"><label>Start time</label><input id="ef-start-${id}" value="${esc(e.start||'')}" /></div>
+      <div class="form-field"><label>End time</label><input id="ef-end-${id}" value="${esc(e.end||'')}" /></div>
+    </div>
+    <div class="form-grid full">
+      <div class="form-field"><label>Description (optional)</label><textarea id="ef-desc-${id}">${esc(e.desc||'')}</textarea></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-field"><label>Category</label><select id="ef-cat-${id}">${catOpts}</select></div>
+      <div class="form-field"><label>Sub-label / note</label><input id="ef-type-${id}" value="${esc(e.type||'')}" /></div>
+    </div>
+    <span class="checks-label">Class tags</span>
+    <div class="checks-grid" id="ef-checks-${id}">
+      ${ALL_CLASS_TAGS.map(c => {
+        let label;
+        if (c === 'All Alumni')       label = 'All Alumni';
+        else if (c === 'Campus-Wide') label = 'Campus-Wide';
+        else                          label = 'Class of ' + c;
+        return `<label class="check-item"><input type="checkbox" value="${c}" ${e.classes.includes(c)?'checked':''}/> ${label}</label>`;
+      }).join('')}
+    </div>
+    <div class="inline-edit-actions">
+      <button class="save-btn" onclick="saveEdit(${id})">Save changes</button>
+      <button class="cancel-btn" onclick="cancelEdit(${id})">Cancel</button>
+    </div>`;
+  document.getElementById('card-'+id).insertAdjacentElement('afterend', form);
+}
+
+function saveEdit(id) {
+  const idx = events.findIndex(ev => ev.id === id); if (idx === -1) return;
+  const title   = document.getElementById('ef-title-'+id).value.trim();
+  const location= document.getElementById('ef-loc-'+id).value.trim();
+  const date    = document.getElementById('ef-date-'+id).value;
+  const start   = document.getElementById('ef-start-'+id).value.trim();
+  const end     = document.getElementById('ef-end-'+id).value.trim();
+  const desc    = document.getElementById('ef-desc-'+id).value.trim();
+  const cat     = document.getElementById('ef-cat-'+id).value;
+  const type    = document.getElementById('ef-type-'+id).value.trim();
+  const classes = [...document.querySelectorAll(`#ef-checks-${id} input:checked`)].map(i=>i.value);
+  if (!title || !start || !classes.length) { alert('Title, start time, and at least one class tag are required.'); return; }
+  events[idx] = { ...events[idx], title, location, date, start, end, desc, cat, type, classes };
+  render();
+}
+
+function cancelEdit(id) {
+  const f = document.getElementById('edit-'+id), c = document.getElementById('card-'+id);
+  if (f) f.remove(); if (c) c.style.opacity = '1';
+}
+
+function deleteEvent(id) {
+  const e = events.find(ev=>ev.id===id);
+  if (!e || !confirm(`Delete "${e.title}"?`)) return;
+  events = events.filter(ev=>ev.id!==id); render();
+}
+
+/* ── ADD EVENT ── */
+function buildClassChecks() {
+  document.getElementById('classChecks').innerHTML = ALL_CLASS_TAGS.map(c => {
+    let label;
+    if (c === 'All Alumni')  label = 'All Alumni — shows on every class filter';
+    else if (c === 'Campus-Wide') label = 'Campus-Wide — shows on main schedule only, not on class filters';
+    else label = 'Class of ' + c;
+    return `<label class="check-item"><input type="checkbox" value="${c}" /> ${label}</label>`;
+  }).join('');
+}
+
+function addEvent() {
+  const title   = document.getElementById('f-title').value.trim();
+  const location= document.getElementById('f-location').value.trim();
+  const date    = document.getElementById('f-date').value;
+  const start   = document.getElementById('f-start').value.trim();
+  const end     = document.getElementById('f-end').value.trim();
+  const desc    = document.getElementById('f-desc').value.trim();
+  const cat     = document.getElementById('f-cat').value;
+  const type    = document.getElementById('f-type').value.trim();
+  const classes = [...document.querySelectorAll('#classChecks input:checked')].map(i=>i.value);
+  if (!title || !start || !classes.length) { alert('Title, start time, and at least one class tag are required.'); return; }
+  events.push({ id:nextId++, title, location, date, start, end, desc, cat, type, classes });
+  ['f-title','f-location','f-start','f-end','f-desc','f-type'].forEach(k=>{document.getElementById(k).value='';});
+  document.querySelectorAll('#classChecks input').forEach(i=>i.checked=false);
+  render();
+}
+
+/* ── ADMIN TOGGLE ── */
+function toggleAdmin() {
+  const p = document.getElementById('adminPanel');
+  p.classList.toggle('open');
+  const open = p.classList.contains('open');
+  document.body.classList.toggle('admin-open', open);
+  document.getElementById('editHint').style.display = open ? 'block' : 'none';
+}
+
+/* ── EMBED CODES ── */
+function buildEmbedCodes() {
+  document.getElementById('embedAll').textContent =
+    `<iframe\n  src="${HOSTED_URL}?embed=1&class=all"\n  width="100%"\n  height="860"\n  frameborder="0"\n  style="border:none;"\n></iframe>`;
+  document.getElementById('classLinksList').innerHTML =
+    '<h4>Class-specific embed snippets</h4>' +
+    REUNION_CLASSES.map(c =>
+      `<div class="class-link-item">
+        <span>${HOSTED_URL}?embed=1&class=${c}</span>
+        <button class="copy-small" onclick="copyText('${HOSTED_URL}?embed=1&class=${c}',this)">Copy</button>
+      </div>`
+    ).join('');
+}
+
+/* ── JSON EXPORT / IMPORT ── */
+function openExport() {
+  document.getElementById('jsonTextarea').value = JSON.stringify(events, null, 2);
+  document.getElementById('jsonModal').classList.add('open');
+}
+function closeExport() { document.getElementById('jsonModal').classList.remove('open'); }
+function copyJson() {
+  navigator.clipboard.writeText(document.getElementById('jsonTextarea').value).then(()=>{
+    const btn = document.querySelector('.json-copy-btn');
+    btn.textContent='Copied!'; setTimeout(()=>btn.textContent='Copy JSON',2000);
+  });
+}
+function importJson() {
+  try {
+    const imported = JSON.parse(document.getElementById('jsonTextarea').value);
+    if (!Array.isArray(imported)) throw new Error('Expected a JSON array.');
+    events = imported;
+    nextId = Math.max(...events.map(e=>e.id), 0) + 1;
+    closeExport(); render();
+    alert(`Imported ${events.length} events successfully.`);
+  } catch(err) { alert('Invalid JSON: ' + err.message); }
+}
+
+/* ── COPY HELPERS ── */
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(()=>{ btn.textContent='Copied!'; setTimeout(()=>btn.textContent='Copy',2000); });
+}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ── CALENDAR EXPORT (ICS) ── */
+function exportCalendar() {
+  const evs = visibleEvents();
+  if (!evs.length) { alert('No events to export for the current filter.'); return; }
+
+  const DATE_MAP = {
+    'Friday, September 18':   '20260918',
+    'Saturday, September 19': '20260919',
+  };
+
+  function toICSTime(dateStr, timeStr) {
+    const ymd = DATE_MAP[dateStr];
+    if (!ymd) return null;
+    if (!timeStr || timeStr === 'TBA') return ymd;
+    const m = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!m) return ymd;
+    let h = parseInt(m[1]), min = parseInt(m[2]);
+    const isPM = m[3].toUpperCase() === 'PM';
+    if (isPM && h !== 12) h += 12;
+    if (!isPM && h === 12) h = 0;
+    return ymd + 'T' + String(h).padStart(2,'0') + String(min).padStart(2,'0') + '00';
+  }
+
+  function icsEscape(s) {
+    return (s || '').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n').replace(/<[^>]+>/g,'');
+  }
+
+  // All dates fall in late April / early May 2026 — EDT (UTC-4) is in effect
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//W&L Alumni Engagement//Five-Star Festival 2026//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:W&L Five-Star Festival 2026',
+    'X-WR-TIMEZONE:America/New_York',
+    // Embed full VTIMEZONE block so all calendar apps handle ET correctly
+    'BEGIN:VTIMEZONE',
+    'TZID:America/New_York',
+    'BEGIN:STANDARD',
+    'DTSTART:19671029T020000',
+    'RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=11',
+    'TZOFFSETFROM:-0400',
+    'TZOFFSETTO:-0500',
+    'TZNAME:EST',
+    'END:STANDARD',
+    'BEGIN:DAYLIGHT',
+    'DTSTART:19870405T020000',
+    'RRULE:FREQ=YEARLY;BYDAY=2SU;BYMONTH=3',
+    'TZOFFSETFROM:-0500',
+    'TZOFFSETTO:-0400',
+    'TZNAME:EDT',
+    'END:DAYLIGHT',
+    'END:VTIMEZONE',
+  ];
+
+  evs.forEach(e => {
+    const dtstart = toICSTime(e.date, e.start);
+    const dtend   = toICSTime(e.date, e.end) || dtstart;
+    if (!dtstart) return;
+
+    const isAllDay = !e.start || e.start === 'TBA' || !dtstart.includes('T');
+    const loc  = icsEscape(e.location);
+    const desc = icsEscape(e.desc + (e.type ? ' [' + e.type + ']' : ''));
+
+    lines.push('BEGIN:VEVENT');
+    lines.push('UID:aw26-event-' + e.id + '@wlu.edu');
+    if (isAllDay) {
+      lines.push('DTSTART;VALUE=DATE:' + dtstart.slice(0,8));
+      lines.push('DTEND;VALUE=DATE:' + dtstart.slice(0,8));
+    } else {
+      lines.push('DTSTART;TZID=America/New_York:' + dtstart);
+      // If end time is missing or same as start, add 1 hour as default duration
+      const endTime = (e.end && e.end !== 'TBA' && dtend.includes('T')) ? dtend : (() => {
+        const h = parseInt(dtstart.slice(9,11)) + 1;
+        return dtstart.slice(0,9) + String(h).padStart(2,'0') + dtstart.slice(11);
+      })();
+      lines.push('DTEND;TZID=America/New_York:' + endTime);
+    }
+    lines.push('SUMMARY:' + icsEscape(e.title));
+    if (loc)  lines.push('LOCATION:' + loc);
+    if (desc) lines.push('DESCRIPTION:' + desc);
+    lines.push('END:VEVENT');
+  });
+
+  lines.push('END:VCALENDAR');
+
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+
+  let fname = 'WL-Five-Star-Festival-2026';
+  if (activeClass !== 'all') fname += '-Class-of-' + activeClass;
+  if (activeDay   !== 'all') fname += '-' + activeDay.replace(/[^a-z0-9]/gi, '-');
+  a.href = url; a.download = fname + '.ics';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  const btn = document.getElementById('calBtn');
+  const orig = btn.innerHTML;
+  btn.textContent = 'Downloaded!';
+  setTimeout(() => { btn.innerHTML = orig; }, 2000);
+}
+
+init();
+</script>
+</body>
+</html>
