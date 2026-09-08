@@ -464,6 +464,61 @@ body.public-mode .admin-panel { display: none !important; }
   .tr-row { grid-template-columns: 1fr; gap: 4px; }
   .tr-time { font-size: 12px; }
 }
+
+/* ═══════════════════════════════════════
+   FAQ ACCORDION
+═══════════════════════════════════════ */
+.faq-wrap { display: flex; flex-direction: column; gap: 8px; }
+.faq-item {
+  background: var(--card); border: 1px solid var(--border-lt);
+  border-radius: var(--r-md); overflow: hidden;
+}
+.faq-q {
+  width: 100%; text-align: left; background: none; border: none;
+  padding: 15px 18px; cursor: pointer; font-family: var(--sans);
+  font-size: 16px; font-weight: 600; color: #1a2a5e;
+  display: flex; align-items: center; gap: 12px; transition: background 0.12s;
+}
+.faq-q:hover { background: var(--sky-pale); }
+.faq-q-text { flex: 1; }
+.faq-chevron {
+  width: 15px; height: 15px; flex-shrink: 0; opacity: 0.55;
+  transition: transform 0.18s ease;
+}
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+.faq-a {
+  display: none; padding: 0 18px 16px;
+  font-size: 15px; color: var(--text-mid); line-height: 1.62;
+}
+.faq-item.open .faq-a { display: block; }
+.faq-a p  { margin-bottom: 10px; }
+.faq-a p:last-child { margin-bottom: 0; }
+.faq-a ul { margin: 0 0 10px 20px; }
+.faq-a li { margin-bottom: 6px; }
+.faq-a a  { color: var(--crimson); }
+.faq-a strong { color: var(--navy); }
+
+.faq-group { margin-bottom: 1.75rem; }
+.faq-group:last-child { margin-bottom: 0; }
+.faq-group-heading {
+  font-family: var(--serif); font-size: 17px; font-weight: normal;
+  color: var(--navy); margin-bottom: 10px; padding-bottom: 6px;
+  border-bottom: 2px solid var(--crimson);
+}
+.faq-group .faq-item { margin-bottom: 8px; }
+.faq-wrap { gap: 0; }
+.faq-intro { font-size: 15px; color: var(--text-mid); line-height: 1.6; margin-bottom: 1.25rem; }
+
+/* FAQ-only embed mode */
+body.faq-only .site-header,
+body.faq-only .admin-toggle-wrap,
+body.faq-only .edit-hint,
+body.faq-only .admin-panel,
+body.faq-only .tab-bar,
+body.faq-only #panel-schedule,
+body.faq-only #panel-transportation { display: none !important; }
+body.faq-only .page-body { padding-top: 0.5rem; }
+
 @media (max-width: 580px) {
   .form-grid, .form-grid.three { grid-template-columns: 1fr; }
   .card-title { font-size: 15px; }
@@ -553,6 +608,10 @@ body.public-mode .admin-panel { display: none !important; }
       Pre-Reunion
       <svg style="width:10px;height:10px;vertical-align:-1px;margin-left:3px;opacity:0.7;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h10v10M17 3L8 12"/></svg>
     </a>
+    <button class="tab-btn tab-faq" id="tab-faq" onclick="switchTab('faq')">
+      <svg style="width:13px;height:13px;vertical-align:-1px;margin-right:5px;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><path d="M7.7 7.6a2.4 2.4 0 1 1 3.1 2.3c-.5.2-.8.7-.8 1.2v.4"/><path d="M10 14.6v.3"/></svg>
+      FAQs
+    </button>
 
   </div>
 
@@ -590,6 +649,10 @@ body.public-mode .admin-panel { display: none !important; }
       </div>
     </div>
   </div><!-- end panel-transportation -->
+<!-- FAQ PANEL -->
+  <div id="panel-faq" style="display:none;">
+    <div class="faq-wrap" id="faqList"></div>
+  </div><!-- end panel-faq -->
 </div>
 
 <!-- JSON MODAL -->
@@ -661,12 +724,109 @@ function getParam(k) { return new URLSearchParams(window.location.search).get(k)
 
 /* ── TAB SWITCHER ── */
 function switchTab(tab) {
-  document.getElementById('panel-schedule').style.display       = tab === 'schedule'      ? '' : 'none';
-  document.getElementById('panel-transportation').style.display  = tab === 'transportation' ? '' : 'none';
-  const sBtn = document.getElementById('tab-schedule');
-  const tBtn = document.getElementById('tab-transportation');
-  sBtn.classList.toggle('tab-active', tab === 'schedule');
-  tBtn.classList.toggle('tab-active', tab === 'transportation');
+  const panels = { schedule: 'panel-schedule', transportation: 'panel-transportation', faq: 'panel-faq' };
+  const tabs   = { schedule: 'tab-schedule',   transportation: 'tab-transportation',   faq: 'tab-faq' };
+  Object.keys(panels).forEach(k => {
+    const p = document.getElementById(panels[k]);
+    if (p) p.style.display = (k === tab) ? '' : 'none';
+    const b = document.getElementById(tabs[k]);
+    if (b) b.classList.toggle('tab-active', k === tab);
+  });
+}
+
+/* ── FAQ ── */
+const FAQ_BOARD_ID  = '18430208260';
+const FAQ_ANSWER_COL = 'long_text_mm70c5gg';
+const FAQ_ORDER_COL  = 'numeric_mm70msnb';
+const FAQ_CATEGORY_COL = 'dropdown_mm70fcda';
+let faqs = [];
+
+/* Turn plain text typed straight into Monday into simple HTML.
+   Blank line = new paragraph, line starting with - or * = bullet. */
+function faqFormat(t) {
+  if (!t) return '';
+  if (/<(p|ul|ol|li|br|strong|em|b|i|a)\b/i.test(t)) return t;   // already HTML
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const lines = t.split(/\r?\n/);
+  let out = '', list = false;
+  lines.forEach(raw => {
+    const line = raw.trim();
+    if (!line) { if (list) { out += '</ul>'; list = false; } return; }
+    if (/^[-*\u2022]\s+/.test(line)) {
+      if (!list) { out += '<ul>'; list = true; }
+      out += '<li>' + esc(line.replace(/^[-*\u2022]\s+/, '')) + '</li>';
+    } else {
+      if (list) { out += '</ul>'; list = false; }
+      out += '<p>' + esc(line) + '</p>';
+    }
+  });
+  if (list) out += '</ul>';
+  return out;
+}
+
+async function loadFaqs() {
+  try {
+    const res = await fetch(WORKER_URL + '?board=' + FAQ_BOARD_ID);
+    if (!res.ok) throw new Error('Worker returned ' + res.status);
+    const json = await res.json();
+    const items = (json.data || json).boards[0].items_page.items;
+    faqs = items.map(item => {
+      const cv = {};
+      item.column_values.forEach(c => { cv[c.id] = c.text || ''; });
+      return {
+        q: item.name || '',
+        a: (cv[FAQ_ANSWER_COL] || '').trim(),
+        cat: (cv[FAQ_CATEGORY_COL] || '').split(',')[0].trim(),
+        order: parseInt(cv[FAQ_ORDER_COL] || '999', 10) || 999,
+      };
+    }).filter(f => f.q).sort((x, y) => x.order - y.order);
+  } catch (err) {
+    console.warn('Could not load FAQs:', err.message);
+    faqs = [];
+  }
+  renderFaqs();
+}
+
+function renderFaqs() {
+  const c = document.getElementById('faqList');
+  if (!c) return;
+  if (!faqs.length) {
+    c.innerHTML = '<div class="empty-state">FAQs will be posted here closer to the event.</div>';
+    return;
+  }
+
+  // group by category, preserving the order categories first appear
+  const groups = [];
+  const seen = {};
+  faqs.forEach(f => {
+    const key = f.cat || '';
+    if (!(key in seen)) { seen[key] = groups.length; groups.push({ cat: key, items: [] }); }
+    groups[seen[key]].items.push(f);
+  });
+
+  let n = 0;
+  c.innerHTML = groups.map(g => {
+    const heading = g.cat ? `<h3 class="faq-group-heading">${g.cat}</h3>` : '';
+    const body = g.items.map(f => {
+      const i = n++;
+      return `<div class="faq-item" id="faq-${i}">
+        <button class="faq-q" onclick="toggleFaq(${i})" aria-expanded="false" aria-controls="faq-a-${i}">
+          <span class="faq-q-text">${f.q}</span>
+          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l5 5 5-5"/></svg>
+        </button>
+        <div class="faq-a" id="faq-a-${i}">${faqFormat(f.a)}</div>
+      </div>`;
+    }).join('');
+    return `<div class="faq-group">${heading}${body}</div>`;
+  }).join('');
+}
+
+function toggleFaq(i) {
+  const item = document.getElementById('faq-' + i);
+  if (!item) return;
+  const open = item.classList.toggle('open');
+  const btn = item.querySelector('.faq-q');
+  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
 /* ── MONDAY COLUMN MAP ──
@@ -717,7 +877,9 @@ function showLoadingState() {
 }
 
 async function init() {
-  if (getParam('embed') === '1') document.body.classList.add('embed-mode');
+  const embedParam = getParam('embed');
+  if (embedParam === '1') document.body.classList.add('embed-mode');
+  if (embedParam === 'faq') { document.body.classList.add('embed-mode'); document.body.classList.add('faq-only'); }
   if (getParam('public') === '1') document.body.classList.add('public-mode');
   activeDay   = getParam('day')   || 'all';
   activeClass = getParam('class') || 'all';
@@ -747,6 +909,8 @@ async function init() {
   }
 
   render();
+  loadFaqs();
+  if (embedParam === 'faq' || getParam('tab') === 'faq') switchTab('faq');
 }
 
 /* ── PILLS ── */
