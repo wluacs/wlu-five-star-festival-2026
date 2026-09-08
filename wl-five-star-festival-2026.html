@@ -642,11 +642,53 @@ body.faq-only .page-body { padding-top: 0.5rem; }
   <!-- TRANSPORTATION PANEL -->
   <div id="panel-transportation" style="display:none;">
     <div class="transport-wrap">
-      <div style="text-align:center; padding: 4rem 2rem;">
-        <svg style="width:48px;height:48px;color:#1e2d6e;opacity:0.3;margin-bottom:1rem;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="7" width="16" height="9" rx="2"/><path d="M5 7V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2"/><circle cx="6" cy="16" r="1.5"/><circle cx="14" cy="16" r="1.5"/></svg>
-        <h3 style="font-family:Georgia,serif; font-weight:normal; font-size:1.4rem; color:#1e2d6e; margin-bottom:0.5rem;">Transportation Information Coming Soon</h3>
-        <p style="color:#888; font-size:14px; max-width:360px; margin:0 auto;">Shuttle schedules and parking details will be posted here closer to the event.</p>
+
+      <div class="transport-note">
+        <svg style="width:15px;height:15px;flex-shrink:0;margin-top:2px;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="8"/><path d="M10 9v5M10 6.5v.5"/></svg>
+        <span><strong>Shuttle vans operate on a loop, running every 20&ndash;30 minutes.</strong> Depending on volume, wait times may exist &mdash; please plan accordingly.</span>
       </div>
+
+      <div class="transport-day">
+        <div class="transport-day-heading">Friday, September 18</div>
+        <div class="transport-table">
+          <div class="tr-row">
+            <div class="tr-time">8:00 AM &ndash; 9:30 PM</div>
+            <div class="tr-desc">Shuttle service to and from the Hampton Inn, The Residence Inn by Marriott and The Wingate to campus. Drop-off at <strong>The Quad</strong> (along Washington Street across from Childress Hall, the new Williams School building).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport-day">
+        <div class="transport-day-heading">Saturday, September 19</div>
+        <div class="transport-table">
+          <div class="tr-row">
+            <div class="tr-time">9:00 AM &ndash; 5:00 PM</div>
+            <div class="tr-desc">Shuttle service to and from the Hampton Inn, The Residence Inn by Marriott and The Wingate to campus. Drop-off at <strong>The Quad</strong> (along Washington Street across from Childress Hall, the new Williams School building).</div>
+          </div>
+          <div class="tr-row">
+            <div class="tr-time">5:00 &ndash; 6:30 PM</div>
+            <div class="tr-desc">Shuttle service to and from the Hampton Inn, The Residence Inn by Marriott and The Wingate to campus. Drop-off at <strong>Memorial Gate Plaza</strong> (along Jefferson Street).</div>
+          </div>
+          <div class="tr-row">
+            <div class="tr-time">6:30 &ndash; 7:00 PM</div>
+            <div class="tr-desc">Shuttle service from Memorial Gate Plaza to <strong>The Livery</strong> (downtown Lexington).</div>
+          </div>
+          <div class="tr-row">
+            <div class="tr-time">8:30 &ndash; 9:30 PM</div>
+            <div class="tr-desc">Shuttle service from The Livery (downtown Lexington) to the Hampton Inn, The Residence Inn by Marriott and The Wingate.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport-hotels">
+        <div class="transport-hotels-heading">Shuttle stops at these hotels</div>
+        <div class="transport-hotels-grid">
+          <span>Hampton Inn</span>
+          <span>The Residence Inn by Marriott</span>
+          <span>The Wingate</span>
+        </div>
+      </div>
+
     </div>
   </div><!-- end panel-transportation -->
 <!-- FAQ PANEL -->
@@ -743,21 +785,41 @@ let faqs = [];
 
 /* Turn plain text typed straight into Monday into simple HTML.
    Blank line = new paragraph, line starting with - or * = bullet. */
+/* Categories always appear on the page in this order, whatever the Order
+   numbers are. Order only controls the sequence of questions inside a
+   category. To move a category, change its position in this list.
+   A category used in Monday but missing here is added at the end. */
+const FAQ_CATEGORY_ORDER = [
+  'Registration',
+  'Lodging',
+  'Attire',
+  'Transportation and Parking',
+  'Weather',
+  'Food and Beverage',
+  'Accessibility',
+  'Campus Safety',
+  'Pets',
+  'Internet and Facilities',
+];
+
 function faqFormat(t) {
   if (!t) return '';
-  if (/<(p|ul|ol|li|br|strong|em|b|i|a)\b/i.test(t)) return t;   // already HTML
+  if (/<(p|ul|ol|li|br|strong|em|b|i|a)\b/i.test(t)) return t;   // legacy HTML, pass through
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const lines = t.split(/\r?\n/);
+  const inline = s => esc(s)
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
   let out = '', list = false;
-  lines.forEach(raw => {
+  t.split(/\r?\n/).forEach(raw => {
     const line = raw.trim();
     if (!line) { if (list) { out += '</ul>'; list = false; } return; }
     if (/^[-*\u2022]\s+/.test(line)) {
       if (!list) { out += '<ul>'; list = true; }
-      out += '<li>' + esc(line.replace(/^[-*\u2022]\s+/, '')) + '</li>';
+      out += '<li>' + inline(line.replace(/^[-*\u2022]\s+/, '')) + '</li>';
     } else {
       if (list) { out += '</ul>'; list = false; }
-      out += '<p>' + esc(line) + '</p>';
+      out += '<p>' + inline(line) + '</p>';
     }
   });
   if (list) out += '</ul>';
@@ -795,19 +857,23 @@ function renderFaqs() {
     return;
   }
 
-  // group by category, preserving the order categories first appear
-  const groups = [];
-  const seen = {};
+  // bucket questions by category (each bucket already sorted by Order)
+  const buckets = {};
   faqs.forEach(f => {
     const key = f.cat || '';
-    if (!(key in seen)) { seen[key] = groups.length; groups.push({ cat: key, items: [] }); }
-    groups[seen[key]].items.push(f);
+    (buckets[key] = buckets[key] || []).push(f);
   });
 
+  // fixed category sequence, then anything unlisted, then uncategorised last
+  const known   = FAQ_CATEGORY_ORDER.filter(k => buckets[k]);
+  const extra   = Object.keys(buckets).filter(k => k && FAQ_CATEGORY_ORDER.indexOf(k) === -1).sort();
+  const ordered = known.concat(extra);
+  if (buckets['']) ordered.push('');
+
   let n = 0;
-  c.innerHTML = groups.map(g => {
-    const heading = g.cat ? `<h3 class="faq-group-heading">${g.cat}</h3>` : '';
-    const body = g.items.map(f => {
+  c.innerHTML = ordered.map(cat => {
+    const heading = cat ? `<h3 class="faq-group-heading">${cat}</h3>` : '';
+    const body = buckets[cat].map(f => {
       const i = n++;
       return `<div class="faq-item" id="faq-${i}">
         <button class="faq-q" onclick="toggleFaq(${i})" aria-expanded="false" aria-controls="faq-a-${i}">
